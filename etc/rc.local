@@ -1,0 +1,42 @@
+#!/bin/sh -e
+#
+## demarrage VPN Hamnet 
+# pon hamnet
+
+echo "7" > /sys/class/gpio/export
+sleep 1
+echo out > /sys/class/gpio/gpio7/direction
+echo 1 > /sys/class/gpio/gpio7/active_low
+echo 0 > /sys/class/gpio/gpio7/value
+
+echo "10" > /sys/class/gpio/export
+sleep 1
+echo in > /sys/class/gpio/gpio10/direction
+
+echo "6" > /sys/class/gpio/export
+sleep 1
+echo out > /sys/class/gpio/gpio6/direction
+
+echo "2" > /sys/class/gpio/export
+sleep 1
+echo in > /sys/class/gpio/gpio2/direction
+
+sleep 1
+
+
+## démarrage svxreflctor a configurer salon regional
+## svxreflector --config=/etc/spotnik/svxreflector.conf --daemon --logfile=/tmp/svxreflector.log
+# sleep 1
+
+## démarrage svxlink
+/etc/spotnik/restart
+
+sleep 2 
+## démarrage GUI
+#cd /opt/spotnik/gui
+#make start
+
+## Demarrage Raptor
+#/opt/RRFRaptor/RRFRaptor.sh start
+nohup /opt/RRFRaptor/rrf-qso-notifier.py &
+exit 0
